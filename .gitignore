@@ -1,0 +1,7 @@
+*.pyc
+*.dot
+*.png
+graphs/
+
+.vscode/*
+.idea/*

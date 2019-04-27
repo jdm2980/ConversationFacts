@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Conversation Facts</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="card">
+        <div class="card-header text-white bg-info">
+            <h3>Conversation Facts</h3>
+        </div>
+        <div class="card-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="form-inline">
+                        <label for="conversationInput">Select a conversation:&nbsp;&nbsp;&nbsp;</label>
+                        <select id="conversationInput" class="form-control">
+                            <option value="0" selected>Conversation 1</option>
+                            <option value="1">Conversation 2</option>
+                            <option value="2">Conversation 3</option>
+                            <option value="3">Conversation 4</option>
+                            <option value="4">Conversation 5</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-md-6 col-sm-12" style="">
+                        <div id="conversationDialog"
+                            style="border: 1px solid gray; border-radius: 5px; max-height:20em; overflow-y: auto; padding: 5px">
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12" style="">
+                        <div id="summaries"
+                            style="border: 1px solid gray; border-radius: 5px;max-height:20em; overflow-y: auto; padding: 5px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-md-12" style="border: 1px solid gray; border-radius: 5px;">
+                        <span><b>Conversation Knowledge Graph</b></span><br />
+                        <img id="kg0" src="" class="img-fluid">
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-md-12" style="border: 1px solid gray; border-radius: 5px;">
+                        <span><b>Summary 1 Knowledge Graph</b></span><br />
+                        <img id="kg1" src="" class="img-fluid">
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-md-12" style="border: 1px solid gray; border-radius: 5px;">
+                        <span><b>Summary 2 Knowledge Graph</b></span><br />
+                        <img id="kg2" src="" class="img-fluid">
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-md-12" style="border: 1px solid gray; border-radius: 5px;">
+                        <span><b>Summary 3 Knowledge Graph</b></span><br />
+                        <img id="kg3" src="" class="img-fluid">
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-md-12" style="border: 1px solid gray; border-radius: 5px;">
+                        <span><b>Summary 4 Knowledge Graph</b></span><br />
+                        <img id="kg4" src="" class="img-fluid">
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col-md-12" style="border: 1px solid gray; border-radius: 5px;">
+                        <span><b>Summary 5 Knowledge Graph</b></span><br />
+                        <img id="kg5" src="" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        $('#conversationInput').on('change', function () {
+            var val = this.value;
+
+            $.ajax({
+                url: "/conversation/" + val, method: 'GET', success: function (result) {
+                    var html = "";
+                    var s1Flag = true;
+                    result.data.forEach(str => {
+                        if (s1Flag) html += "<span><b>S1:&nbsp;</b>" + str + "</span><br/>";
+                        else html += "<span><b>S2:&nbsp;</b>" + str + "</span><br/>";
+                        s1Flag = !s1Flag;
+                    });
+                    $('#conversationDialog').html(html);
+                }
+            })
+
+            $.ajax({
+                url: "/summary/" + val, method: 'GET', success: function (result) {
+                    var html = "";
+                    var count = 1;
+                    result.data.forEach(str => {
+                        html += "<span><b>Summary " + count + ":&nbsp;</b>" + str + "</span><br/>";
+                        count++;
+                    });
+                    $('#summaries').html(html);
+                }
+            })
+
+            $.ajax({
+                url: "/kgs/" + val, method: 'GET', success: function (result) {
+                    d = new Date();
+                    $('#kg0').attr('src', '/graphs/graph_convo.png?' + d.getTime());
+                    $('#kg1').attr('src', '/graphs/graph0.png?' + d.getTime());
+                    $('#kg2').attr('src', '/graphs/graph1.png?' + d.getTime());
+                    $('#kg3').attr('src', '/graphs/graph2.png?' + d.getTime());
+                    $('#kg4').attr('src', '/graphs/graph3.png?' + d.getTime());
+                    $('#kg5').attr('src', '/graphs/graph4.png?' + d.getTime());
+                }
+            })
+        })
+
+        $('#conversationInput').val(0).change();
+    </script>
+</body>
+
+</html>
