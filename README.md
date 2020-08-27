@@ -1,5 +1,6 @@
 # ConversationFacts
 Project for CS4624 @ Virginia Tech
+https://vtechworks.lib.vt.edu/handle/10919/89567
 
 Made by:  
 [Jon Marks](https://github.com/jdm2980)  
